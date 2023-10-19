@@ -45,6 +45,8 @@ def request():
 
     #print(devices)
     device = hid.device()
+    if not hid_paths:
+        return []
     for idx, hid_path in enumerate(hid_paths):
         data = None
         device.open_path(hid_path)
