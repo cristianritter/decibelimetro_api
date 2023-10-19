@@ -1,28 +1,9 @@
-"""
-import hid
 
-def list_hid_devices():
-    try:
-        devices = hid.enumerate()
-        if devices:
-            print("List of HID devices:")
-            for device in devices:
-                print(f"Vendor ID: {device['vendor_id']}, Product ID: {device['product_id']}")
-                print(f"Manufacturer: {device['manufacturer_string']}, Product: {device['product_string']}")
-                print(f"Serial Number: {device['serial_number']}, Path: {device['path']}")
-                print("----")
-        else:
-            print("No HID devices found.")
-    except Exception as e:
-        print(f"Error: {str(e)}")
-
-if __name__ == "__main__":
-    list_hid_devices()
-"""
 
 
 import hid
 import time
+from list_devices import list_hid_paths
 
 vendor_id = 25789
 product_id = 29923
@@ -54,23 +35,24 @@ def write_data_to_hid(device, data_to_send):
 def request():
     # Open the HID device
     sound_lvl = []
-    devices = []
+    hid_paths = list_hid_paths()
 
-    for _ in range(4):
-        data = None
-        device = hid.device()
-        device.open(vendor_id, product_id)
-        if device:
-            devices.append(device)
+    # for device in devices:
+    #    device = hid.device()
+    #    device.open(vendor_id, product_id)
+    #    if device:
+    #        devices.append(device)
 
     #print(devices)
-
-    for idx, dev in enumerate(devices):
-        write_data_to_hid(dev, request_data)
+    device = hid.device()
+    for idx, hid_path in enumerate(hid_paths):
+        data = None
+        device.open_path(hid_path)
+        write_data_to_hid(device, request_data)
         wg = time.time()
         while not data:
             if time.time() > wg+2: break
-            data = dev.read(8)  # You may need to adjust the buffer size
+            data = device.read(8)  # You may need to adjust the buffer size
         if data:
             print(f"Received data: {data}")
             calc = ((data[0]<<8) + data[1])/10
@@ -79,7 +61,7 @@ def request():
                 if sound_lvl[idx]==sound_lvl[idx-1] or sound_lvl[idx-1]==0:
                     sound_lvl[idx]=0                
         # Close the HID device (This code may not be reached if you terminate the program externally)
-        close_hid_device(dev)
+        close_hid_device(device)
     return sound_lvl
 
 

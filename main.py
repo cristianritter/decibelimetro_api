@@ -1,8 +1,6 @@
-import serial
-from flask import Flask,render_template,url_for,request,redirect, make_response
+#import serial
 import json
-from time import time, sleep
-from flask import Flask, render_template, make_response
+from flask import Flask, render_template, request, make_response
 from hid_receiver import request
 from datetime import datetime
 app = Flask(__name__)
