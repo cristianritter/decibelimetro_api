@@ -49,6 +49,7 @@ def request():
         return []
     for idx, hid_path in enumerate(hid_paths):
         data = None
+        print(hid_path)
         device.open_path(hid_path)
         write_data_to_hid(device, request_data)
         wg = time.time()
