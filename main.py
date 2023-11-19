@@ -28,12 +28,18 @@ def main():
 
 @app.route('/data', methods=["GET", "POST"])
 def data():
-    i = request()
+    try:
+        i = request()
+    except Exception as err:
+        print(err)
+        print("Cant open device, try run main.py as sudo.")
+        return "Cant open device, try run main.py as sudo"    
     data = [{'timestamp': datetime.now().timestamp().__round__()}]
     for idx, value in enumerate(i):
         line = {'device':idx, 'value': value}
         data.append(line)
 
+    #if(len(data) == 1): data = ["Cant open device, try run main as sudo."]
     response = make_response(json.dumps(data))
 
     response.content_type = 'application/json'
