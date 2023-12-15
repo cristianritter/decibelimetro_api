@@ -1,4 +1,3 @@
-#import serial
 import json
 from flask import Flask, render_template, request, make_response
 from hid_receiver import request
@@ -6,21 +5,6 @@ from datetime import datetime
 app = Flask(__name__)
 
 i = 0
-
-"""def update_value():
-    while 1:
-        try:
-            with serial.Serial('COM3', 9600) as ser: 
-                global i
-                linha = ser.readline()
-                linha_str = linha.decode('utf-8') 	
-                print(linha_str)
-                i = int(linha_str)
-                ser.flush
-            sleep(1)
-        except:
-            pass
-"""
             
 @app.route('/', methods=["GET", "POST"])
 def main():
@@ -45,9 +29,6 @@ def data():
     response.content_type = 'application/json'
 
     return response
-
-#t1 = threading.Thread(target=update_value, args=())
-#t1.start()
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -36,14 +36,6 @@ def request():
     # Open the HID device
     sound_lvl = []
     hid_paths = list_hid_paths()
-
-    # for device in devices:
-    #    device = hid.device()
-    #    device.open(vendor_id, product_id)
-    #    if device:
-    #        devices.append(device)
-
-    #print(devices)
     device = hid.device()
     if not hid_paths:
         return []
