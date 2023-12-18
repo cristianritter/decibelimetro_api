@@ -1,26 +1,16 @@
-# Use uma imagem base, por exemplo, uma imagem do Ubuntu
+# Use uma imagem base, por exemplo, uma imagem do Debian Bullseye
 FROM debian:bullseye
-# Use uma imagem base do Python
-FROM python:3.8
 
 # Atualize os pacotes e instale as dependências
-RUN apt-get update && apt-get install -y \
-    software-properties-common \
-    && rm -rf /var/lib/apt/lists/*
-
 RUN apt-get update && \
-    apt-get install -y python3 python3-pip && \
-    pip3 install --no-cache-dir -r requirements.txt
-
-# Instale qualquer software adicional que você precise
-RUN apt-get update && apt-get install -y \
+    apt-get install -y \
+    software-properties-common \
+    python3=3.9.* \
+    python3-pip=18.* \
     curl \
     vim \
+    git \
     && rm -rf /var/lib/apt/lists/*
-
-
-# Instale o Git (se não estiver incluído na imagem base)
-RUN apt-get update && apt-get install -y git
 
 # Defina o diretório de trabalho padrão
 WORKDIR /app
@@ -31,5 +21,8 @@ RUN git clone https://github.com/cristianritter/decibelimetro_api /caminho/no/co
 # Copie os arquivos necessários para dentro do contêiner
 COPY ./app /app
 
+# Instale as dependências do aplicativo
+RUN pip3 install --no-cache-dir -r /app/requirements.txt
+
 # Execute o comando de inicialização do aplicativo
-CMD ["python", "main.py"]
+CMD ["python3", "main.py"]
